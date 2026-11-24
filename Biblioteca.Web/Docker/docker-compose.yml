@@ -1,0 +1,14 @@
+name: Educacion IT
+services:
+    db:
+        image: mcr.microsoft.com/mssql/server:2025-latest
+        container_name: Biblioteca
+        environment:
+            ACCEPT_EULA: "Y"
+            MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD}"
+        ports:
+            - "1433:1433"
+        volumes:
+            - dbdata:/var/opt/mssql
+volumes:
+    dbdata:
