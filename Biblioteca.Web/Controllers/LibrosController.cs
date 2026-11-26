@@ -1,17 +1,19 @@
-﻿using Biblioteca.Web.Models;
+﻿using Biblioteca.Web.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 
-namespace Biblioteca.Web.Controllers
+namespace Biblioteca.Web.Controllers;
+
+public class LibrosController(BibliotecaDbContext context) : Controller
 {
-    public class LibrosController : Controller
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        public async Task<IActionResult> Index()
-        {
+        var libros = await context.Libros
+            .AsNoTracking()
+            .OrderBy(libro => libro.Titulo)
+            .ThenBy(libro => libro.Id)
+            .ToListAsync(cancellationToken);
 
-           // var libros = await new LibroRepository().GetAllAsync();
-
-            return View(new List<Libro>());
-        }
+        return View(libros);
     }
 }

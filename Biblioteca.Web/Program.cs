@@ -1,7 +1,18 @@
+using Biblioteca.Web.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException(
+        "No se configuró la cadena ConnectionStrings:DefaultConnection. " +
+        "Configúrala con User Secrets en desarrollo o con la variable de entorno " +
+        "ConnectionStrings__DefaultConnection.");
+
+builder.Services.AddDbContext<BibliotecaDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
